@@ -22,7 +22,7 @@ export async function POST(request) {
     return new Response(
       JSON.stringify({
         status: 1,
-        response: translationResult.result.translations[0].translation,
+        translation: translationResult.result.translations[0].translation,
         error: '',
       })
     );
@@ -31,7 +31,7 @@ export async function POST(request) {
     return new Response(
       JSON.stringify({
         status: 0,
-        response: '',
+        translation: '',
         error: 'Whoops! something happend while checking your request',
       })
     );

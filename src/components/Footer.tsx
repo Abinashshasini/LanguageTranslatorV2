@@ -22,9 +22,10 @@ const Footer: React.FC = () => {
   };
   return (
     <footer className="footer">
-      <div>
-        <p style={{ fontSize: '1rem' }}>Abinash Shasini</p>
-      </div>
+      <p style={{ fontSize: '1rem' }} className="footer__heading">
+        Abinash Shasini
+      </p>
+
       <div className="socialMedia">
         <Tooltip
           title="Facebook"
@@ -55,11 +56,9 @@ const Footer: React.FC = () => {
           <TwitterIcon style={{ color: '#00acee' }} />
         </Tooltip>
       </div>
-      <div>
-        <p>
-          Made with <span style={{ color: 'red' }}>❤️</span> and React.js
-        </p>
-      </div>
+      <p className="footer__heading">
+        Made with <span style={{ color: 'red' }}>❤️</span> and React.js
+      </p>
     </footer>
   );
 };
