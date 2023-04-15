@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import handleFetchTranslation from '@/utils/handleFetchData';
 import debounce from 'lodash.debounce';
 import data from '@/utils/languageData';
+import Loading from './Loading';
 
 type Response = {
   [x: string]: any;
@@ -36,9 +37,12 @@ const TranslationBox: React.FC = () => {
         text: translationText,
         modelId: `${selectedLanguageOne}-${selectedLanguageTwo}`,
       })) as Object;
+      // setting loading state to false
+      setLoading(false);
       if (response?.status === 1) {
-        setLoading(false);
         setTranslation(response.translation);
+      } else {
+        setTranslation(response.error);
       }
     } catch (error) {
       setLoading(false);
@@ -132,7 +136,17 @@ const TranslationBox: React.FC = () => {
         </div>
 
         <div className="result-box">
-          <p>{translation}</p>
+          {loading ? (
+            <Loading />
+          ) : (
+            <p
+              style={{
+                padding: translation?.length > 0 ? '5px 10px' : '0px',
+              }}
+            >
+              {translation}
+            </p>
+          )}
         </div>
       </motion.div>
     </div>
