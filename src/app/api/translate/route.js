@@ -25,6 +25,15 @@ export async function POST(request) {
         })
       );
     }
+    if (text === '') {
+      return new Response(
+        JSON.stringify({
+          status: 0,
+          translation: '',
+          error: 'Please enter some text for translation',
+        })
+      );
+    }
     const translationResult = await languageTranslator.translate(
       translateParams
     );
