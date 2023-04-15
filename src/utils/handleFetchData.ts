@@ -16,7 +16,7 @@ export default async function handleFetchTranslation({
         'Content-Type': 'application/json',
       },
     });
-    return response;
+    return await response.json();
   } catch (error) {
     console.error('Whoops! something went wrong', error);
   }

@@ -1,13 +1,49 @@
 'use client';
 import { ChangeEvent, useState } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { motion } from 'framer-motion';
+import handleFetchTranslation from '@/utils/handleFetchData';
+import debounce from 'lodash.debounce';
 import data from '@/utils/languageData';
+
+type Response = {
+  [x: string]: any;
+  status?: number;
+  translation?: string | any;
+};
 
 const TranslationBox: React.FC = () => {
   // * Required states for language selection * //
   const [languageFirst, setLanguageFirst] = useState('en');
   const [languageSecond, setLanguageSecond] = useState('en');
+  const [translation, setTranslation] = useState('');
+  const [loading, setLoading] = useState(false);
   const [inpute, setInpute] = useState('');
+
+  // * Function to fetch translation details * //
+  const handleGetTranslationDetails = async ({
+    translationText,
+    selectedLanguageOne,
+    selectedLanguageTwo,
+  }: {
+    translationText: string;
+    selectedLanguageOne: string;
+    selectedLanguageTwo: string;
+  }) => {
+    try {
+      setLoading(true);
+      const response: Response = (await handleFetchTranslation({
+        text: translationText,
+        modelId: `${selectedLanguageOne}-${selectedLanguageTwo}`,
+      })) as Object;
+      if (response?.status === 1) {
+        setLoading(false);
+        setTranslation(response.translation);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   // * Function to select the first language * //
   const handleChangeFirst = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -20,21 +56,34 @@ const TranslationBox: React.FC = () => {
     const { value } = e.target;
     setLanguageSecond(value);
     if (!inpute) {
-      //   dispatch(setSnackbar(true, 'error', 'Please inpute some text'));
+      // show error message
     } else {
-      //   dispatch(translationResult(languageFirst, e.target.value, inpute));
+      handleGetTranslationDetails({
+        translationText: inpute,
+        selectedLanguageOne: languageFirst,
+        selectedLanguageTwo: value,
+      });
     }
   };
 
   // * Function to get the input text value * //
-  const handleInputeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setInpute(e.target.value);
-    // dispatch(translationResult(languageFirst, languageSecond, value));
-  };
+  const handleInputeText = debounce((e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setInpute(value);
+    handleGetTranslationDetails({
+      translationText: value,
+      selectedLanguageOne: languageFirst,
+      selectedLanguageTwo: languageSecond,
+    });
+  }, 500);
 
   return (
     <div className="wrapper">
-      <div className="select-container">
+      <motion.div
+        className="select-container"
+        whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="selectCont">
           <select
             name="languageFirst"
@@ -58,8 +107,12 @@ const TranslationBox: React.FC = () => {
           className="textarea"
           onChange={(e) => handleInputeText(e)}
         />
-      </div>
-      <div className="select-container">
+      </motion.div>
+      <motion.div
+        className="select-container"
+        whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="selectCont">
           <select
             name="languageSecond"
@@ -79,9 +132,9 @@ const TranslationBox: React.FC = () => {
         </div>
 
         <div className="result-box">
-          <p>baklol</p>
+          <p>{translation}</p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
