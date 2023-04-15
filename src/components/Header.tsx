@@ -9,7 +9,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 const Header: React.FC = () => {
   // * Function to navigate the user to git hub * //
   const handleNavigateToGithub = () => {
-    window.open('https://github.com/Abinashshasini/LanguageTranslator');
+    window.open('https://github.com/Abinashshasini/LanguageTranslatorV2');
   };
 
   return (

@@ -46,7 +46,7 @@ const data = [
   },
   {
     id: 10,
-    languageid: 'en-de',
+    languageid: 'de',
     language: 'German',
   },
   {
